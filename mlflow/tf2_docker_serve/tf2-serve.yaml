@@ -1,0 +1,31 @@
+# (로컬에서 시크릿 없이 실행할 때 생기는 에러 발생 해결 방법 중 하나.)
+# 1. 사전에 이미지를 개인 계정에 업로드. (tag, push)
+# 2. secret 생성. (쿠버네티스 입문 11.2.3 방법) 
+#   kubectl create secret docker-registry dockersecret3 --docker-username=wwaust --docker-password=<password> --docker-email=changwooha89@gmail.com
+# 3. 생성한 secret 이름을 imagePullSecrets.name에 입력
+# 4. apply yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf2-serve
+  labels:
+    app: tf2-serve
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tf2-serve
+  template:
+    metadata:
+      labels:
+        app: tf2-serve
+    spec:
+      containers:
+      - name: tf2-serve
+        image: wwaust/tf_serve:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: dockersecret3
+      
