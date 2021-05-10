@@ -10,11 +10,11 @@ kind: Service
 metadata: 
   name: tf2-serve
 spec: 
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: tf2-serve
   ports: 
     - protocol: TCP
       port: 3200
       targetPort: 3000
-      nodePort: 30008
+      nodePort: 30010

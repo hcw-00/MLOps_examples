@@ -5,16 +5,25 @@
 # 3. 생성한 secret 이름을 imagePullSecrets.name에 입력
 # 4. apply yaml
 
-apiVersion: v1
-kind: Service
-metadata: 
-  name: tf2-serve
-spec: 
-  type: NodePort
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf2-service
+  labels:
+    app: tf2-service
+spec:
+  replicas: 2
   selector:
-    app: tf2-serve
-  ports: 
-    - protocol: TCP
-      port: 3200
-      targetPort: 3000
-      nodePort: 30008
+    matchLabels:
+      app: tf2-service
+  template:
+    metadata:
+      labels:
+        app: tf2-service
+    spec:
+      containers:
+      - name: tf2-service
+        image: wwaust/tf_serve:latest
+        ports:
+        - containerPort: 3000
+      
